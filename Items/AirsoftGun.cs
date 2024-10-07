@@ -50,7 +50,6 @@ namespace Omni_Customitems.Items
         {
             if (Check(ev.Attacker.CurrentItem))
             {
-                
                 ev.IsAllowed = false;
             }
             if (ev.Attacker.Role.Team==ev.Player.Role.Team)
