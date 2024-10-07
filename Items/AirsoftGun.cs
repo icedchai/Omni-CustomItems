@@ -46,15 +46,11 @@ namespace Omni_Customitems.Items
         public override bool ShouldMessageOnGban { get; } = true;
         public override float Weight { get; set; }
         public override SpawnProperties? SpawnProperties {get; set;}
-        protected override void OnHurting(HurtingEventArgs ev)
+        protected override void OnShot(ShotEventArgs ev)
         {
-            if (Check(ev.Attacker.CurrentItem))
+            if (Check(ev.Player.CurrentItem))
             {
-                ev.IsAllowed = false;
-            }
-            if (ev.Attacker.Role.Team==ev.Player.Role.Team)
-            {
-                ev.IsAllowed = false;
+                ev.CanHurt = false;
             }
 
         }
