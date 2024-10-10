@@ -1,36 +1,33 @@
-﻿using Exiled.API.Extensions;
-using Exiled.API.Features.Attributes;
-using Exiled.API.Features.Spawn;
+﻿using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.Features;
-using InventorySystem.Items.Firearms.Attachments;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 
 namespace Omni_Customitems.Items
 {
 
-    public abstract class AirsoftGun : CustomWeapon
+    public abstract class AbstractAirsoftGun : CustomWeapon
     {
 
         public override uint Id { get; set; }
         [YamlIgnore]
-        public override float Damage { get; set; } = 0f;
+        public override float Damage { get; set; } = 0.01f;
 
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.UnloadingWeapon += new CustomEventHandler<UnloadingWeaponEventArgs>(OnUnload);
+            Exiled.Events.Handlers.Player.Handcuffing += new CustomEventHandler<HandcuffingEventArgs>(OnCuffing);
+            Exiled.Events.Handlers.Item.ChangingAttachments += new CustomEventHandler<ChangingAttachmentsEventArgs>(OnChangingAttachment);
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.UnloadingWeapon -= new CustomEventHandler<UnloadingWeaponEventArgs>(OnUnload);
+            Exiled.Events.Handlers.Player.Handcuffing -= new CustomEventHandler<HandcuffingEventArgs>(OnCuffing);
+            Exiled.Events.Handlers.Item.ChangingAttachments -= new CustomEventHandler<ChangingAttachmentsEventArgs>(OnChangingAttachment);
             base.UnsubscribeEvents();
         }
         protected void OnUnload(UnloadingWeaponEventArgs ev)
@@ -39,16 +36,29 @@ namespace Omni_Customitems.Items
             {
                 ev.IsAllowed = false;
             }
-
+        }
+        protected void OnChangingAttachment(ChangingAttachmentsEventArgs ev)
+        {
+            if (Check(ev.Firearm))
+            {
+                ev.IsAllowed = false;
+            }
+        }
+        protected void OnCuffing(HandcuffingEventArgs ev)
+        {
+            if (Check(ev.Player))
+            {
+                ev.IsAllowed = false;
+            }
         }
         public override string Name { get; set; }
         public override string Description { get; set; }
         public override bool ShouldMessageOnGban { get; } = true;
         public override float Weight { get; set; }
-        public override SpawnProperties? SpawnProperties {get; set;}
+        public override SpawnProperties? SpawnProperties { get; set; }
         protected override void OnShot(ShotEventArgs ev)
         {
-            if (Check(ev.Player.CurrentItem))
+            if (Check(ev.Firearm))
             {
                 ev.CanHurt = false;
             }
@@ -56,9 +66,10 @@ namespace Omni_Customitems.Items
         }
         protected override void OnShooting(ShootingEventArgs ev)
         {
-            if(Check(ev.Player.CurrentItem))
+            if (Check(ev.Player.CurrentItem))
             {
                 ev.Firearm.Ammo = ev.Firearm.MaxAmmo;
+
             }
 
         }
@@ -69,5 +80,6 @@ namespace Omni_Customitems.Items
                 ev.IsAllowed = false;
             }
         }
+
     }
 }

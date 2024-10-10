@@ -23,3 +23,4 @@ B:\Projects\Plugins SL\Omni-CustomItems\Omni-Customitems\bin\Debug\net48\UnityEn
 B:\Projects\Plugins SL\Omni-CustomItems\Omni-Customitems\obj\Debug\net48\Omni-Customitems.csproj.CopyComplete
 B:\Projects\Plugins SL\Omni-CustomItems\Omni-Customitems\obj\Debug\net48\Omni-Customitems.dll
 B:\Projects\Plugins SL\Omni-CustomItems\Omni-Customitems\obj\Debug\net48\Omni-Customitems.pdb
+B:\Projects\Plugins SL\Omni-CustomItems\Omni-Customitems\bin\Debug\net48\UnityEngine.PhysicsModule.dll
